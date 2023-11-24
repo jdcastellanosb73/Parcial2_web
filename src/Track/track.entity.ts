@@ -1,4 +1,4 @@
-import { AerolineaEntity } from '../aerolinea/aerolinea.entity';
+import { AlbumEntity } from '../Album/album.entity';
 import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable} from 'typeorm';
 
 
@@ -6,7 +6,7 @@ import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable} from 'ty
 "3. se genera el import de la clase creada acorde al enunciado"
 "4. se crea la clase aeropuerto.service.ts la cual es la logica de aerolinea"
 @Entity()
-export class AeropuertoEntity{
+export class TrackEntity{
    "se usan los parametros dados por el enunciado en este caso nombre, codigo, pais, ciudad."
     @PrimaryGeneratedColum('uuid')
     id: string;
@@ -15,17 +15,11 @@ export class AeropuertoEntity{
     nombre: string;
 
     @Column()
-    codigo: string;
-
-    @Column()
-    pais: string;
-
-    @Column()
-    ciudad: string;
+    duracion: number;
 
         //ManyToMany con AerolineaEntity
-        @ManyToMany(type => AerolineaEntity, aerolinea => aerolinea.aeropuertos)
+        @ManyToOne(type => AlbumEntity, album => album.albums)
         @JoinTable()
-        aerolineas: AerolineaEntity[];
+        albums: AlbumEntity[];
 
 }
