@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PerfomerEntity } from './perfomer.entity';
+import { PerfomerEntity } from './performer.entity';
 import { AlbumEntity } from '../album/album.entity';
 import { PerformerDto } from './performer.dto';
 
@@ -23,12 +23,12 @@ export class PerfomerService {
     }
 
     async create(perfomerDto: PerformerDto): Promise<PerfomerEntity> {
-        if (perfomerDto.descripcion <= 100) {
-            throw new BadRequestException('la descripcion se pasa de 100 caracteristicas');
+        if (perfomerDto.descripcion && perfomerDto.descripcion.length > 100) {
+            throw new BadRequestException('la descripcion tiene mas de 100 caracteres');
         }
 
         const performer = new PerfomerEntity();
         Object.assign(performer, perfomerDto);
-        return await this.performerRepository.save(perfomer);
+        return await this.performerRepository.save(performer);
     }
 }

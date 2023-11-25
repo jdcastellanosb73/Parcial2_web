@@ -1,12 +1,12 @@
 import { TrackEntity } from '../Track/track.entity';
-import { PerformerEntity } from '../Performer/Performer.entity';
-import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable} from 'typeorm';
+import { PerformerEntity } from '../performer/Performer.entity';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToMany,OneToMany, JoinTable} from 'typeorm';
 
 
 @Entity()
 export class AlbumEntity{
    
-    @PrimaryGeneratedColum('uuid')
+    @PrimaryGeneratedColumn('uuid')
     id: string;
     
     @Column()
@@ -22,7 +22,8 @@ export class AlbumEntity{
     descripcion: string;
 
 
-    @OneToMany(type => TrackEntity, track => track.albums)
+
+    @OneToMany(type => TrackEntity, track => track.album)
     @JoinTable()
     tracks: TrackEntity[];
 

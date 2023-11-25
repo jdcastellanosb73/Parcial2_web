@@ -1,14 +1,15 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { AlbumDto } from './album.dto';
+import { Response } from 'express';
 
-@Controller('airlines')
+@Controller('albums')
 export class AerolineaController {
     constructor(private albumService: AlbumService) {}
 
     @Get()
     async findAll() {
-        return this.albumService.findAll();
+        return this.albumService.findall();
     }
 
     @Get(':id')

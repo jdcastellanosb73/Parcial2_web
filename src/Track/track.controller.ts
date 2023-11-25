@@ -2,8 +2,8 @@ import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common'
 import { TrackService } from './track.service';
 import { TrackDto } from './track.dto';
 
-@Controller('airports')
-export class AeropuertoController {
+@Controller('tracks')
+export class TrackController {
     constructor(private TrackService: TrackService) {}
 
     @Get()

@@ -15,20 +15,30 @@ export class TrackService {
     ) {}
 
     async findAll(): Promise<TrackEntity[]> {
-        return await this.trackRepository.find({ relations: ['albums'] });
-    }
+        return await this.trackRepository.find({ relations: ['album'] });
+    }    
 
     async findOne(id: string): Promise<TrackEntity> {
-        return await this.trackRepository.findOne({ where: { id }, relations: ['albums'] });
-    }
+        const track = await this.trackRepository.findOne({ 
+            where: { id }, 
+            relations: ['album'] 
+        });
+        return track;
+    }     
 
-    async create(trackDto: TrackDto): Promise<TrackEntity> {
-        if (trackDto.duracion.length <0) {
-            throw new BadRequestException('el track tiene que tener una duracion mayor a 0.');
+    async create(trackDto: TrackDto): Promise<TrackEntity> {   
+        if (trackDto.duracion <= 0) {
+            throw new BadRequestException('La duración del track debe ser un número positivo.');
         }
-
+        const album = await this.albumRepository.findOne({ where: { id: trackDto.albumId } });
+        if (!album) {
+            throw new NotFoundException(`el Track no tiene un album asociado`);
+        }
+    
         const track = new TrackEntity();
+        track.album = album;
         Object.assign(track, trackDto);
         return await this.trackRepository.save(track);
     }
+    
 }

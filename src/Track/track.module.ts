@@ -1,13 +1,18 @@
-import { Module } from '@nestjs/common';
-import { TrackService } from './track.service';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TrackService } from './track.service';
 import { TrackEntity } from './track.entity';
-import { TrackController } from './track.controller';
-//TODO: revisar
+import { AlbumModule } from '../album/album.module';
+import { TrackController } from './track.controller'; 
+
 
 @Module({
+  imports: [
+    TypeOrmModule.forFeature([TrackEntity]),
+    forwardRef(() => AlbumModule),
+  ],
   providers: [TrackService],
-  imports: [TypeOrmModule.forFeature([TrackEntity])],
-  controllers: [TrackController],
+  controllers: [TrackController], 
+  exports: [TypeOrmModule.forFeature([TrackEntity]), TrackService]
 })
 export class TrackModule {}
