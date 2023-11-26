@@ -18,6 +18,48 @@ describe('albumService', () => {
   let deleteSpy: { calledWithId: string | null };  
 
 
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      imports: [...TypeOrmTestingConfig()],
+      providers: [AlbumService],
+    }).compile();
+    service = module.get<AlbumService>(AlbumService);
+    repository = module.get<Repository<AlbumEntity>>(getRepositoryToken(AlbumEntity));
+    trackRepository = module.get<Repository<TrackEntity>>(getRepositoryToken(TrackEntity));
+    performerRepository = module.get<Repository<PerformerEntity>>(getRepositoryToken(PerformerEntity));
+    await seedDatabase();
+
+   
+  });
+
+  const seedDatabase = async () => {
+
+    repository.clear();
+
+    const trackTest = new TrackEntity();
+    trackTest.id = faker.string.uuid();
+    trackTest.nombre = faker.location.city();
+    trackTest.duracion = faker.number.int();
+    
+    const performerTest = new PerformerEntity();
+    performerTest.id = faker.string.uuid();
+    performerTest.nombre = faker.location.city();
+    performerTest.imagen = faker.image.url();
+    performerTest.descripcion= faker.lorem.sentence();
+
+
+    albumList = Array.from({ length: 5 }).map(() => ({
+      id: faker.string.uuid(),
+      nombre: faker.company.name(),
+      caratula: faker.lorem.sentence(),
+      descripcion: faker.lorem.sentence(),
+      fechaDeLanzamiento: faker.date.past(),
+      tracks: [trackTest],
+      performers:[performerTest],
+    }));
+    
+  }
+
   it('findall deberia retornar todos los albums', async () => {
     const result = await service.findall();
     expect(result).toEqual(albumList);
@@ -36,8 +78,8 @@ describe('albumService', () => {
 
   it('se deberia crear el album correctamente', async () => {
     const newAlbum = {
-      nombre: faker.name.findName(),
-      caratula: faker.image.imageUrl(),
+      nombre: faker.name.firstName(),
+      caratula: faker.image.url(),
       descripcion: faker.lorem.sentence(),
       fechaDeLanzamiento: faker.date.past(),
       performers: [],
@@ -53,8 +95,9 @@ describe('albumService', () => {
 
   it('deberia mostrar una excepción cuando se cree con la descripcion vacia', async () => {
     const newAlbum = {
-      nombre: faker.name.findName(),
-      caratula: faker.image.imageUrl(),
+      id: faker.string.uuid(),
+      nombre: faker.person.firstName(),
+      caratula: faker.image.url(),
       descripcion: '',
       fechaDeLanzamiento: faker.date.past(),
       performers: [],
@@ -91,7 +134,7 @@ describe('albumService', () => {
     performer.id = faker.datatype.uuid();
   
     repository.findOne = jest.fn().mockResolvedValue(album);
-    performer.findOne = jest.fn().mockResolvedValue(performer);
+    performerRepository.findOne = jest.fn().mockResolvedValue(performer);
   
     const result = await service.addPerformerToAlbum(album.id, performer.id);
   

@@ -15,6 +15,44 @@ describe('PerformerService', () => {
     let performerList: PerformerEntity[];
     let deleteSpy: { calledWithId: string | null };
 
+
+    beforeEach(async () => {
+        performerList = Array.from({ length: 5 }).map(() => ({
+        id: faker.string.uuid(),
+        nombre: faker.name.firstName(),
+        imagen: faker.image.url(),
+        descripcion: faker.lorem.sentence(),
+        albums: [],
+      }));
+  
+      deleteSpy = { calledWithId: null };
+  
+      const module: TestingModule = await Test.createTestingModule({
+        imports: [...TypeOrmTestingConfig()],
+        providers: [
+          PerformerService,
+          {
+            provide: getRepositoryToken(PerformerEntity),
+            useValue: {
+              find: jest.fn().mockResolvedValue(performerList),
+              findOne: jest.fn().mockImplementation((options) => {
+                const id = options.where.id;
+                return Promise.resolve(performerList.find(a => a.id === id));
+              }),
+              save: jest.fn().mockImplementation((aero) => Promise.resolve({ id: faker.datatype.uuid(), ...aero })),
+              delete: jest.fn().mockImplementation((id: string) => {
+                deleteSpy.calledWithId = id;
+                return Promise.resolve({ affected: 1 });
+              }),
+            },
+          },
+        ],
+      }).compile();
+
+      service = module.get<PerformerService>(PerformerService);
+      performerRepository = module.get<Repository<PerformerEntity>>(getRepositoryToken(PerformerEntity));
+      albumRepository = module.get<Repository<AlbumEntity>>(getRepositoryToken(AlbumEntity));
+    });
   
     it('findAll deberia retornar todos los performers', async () => {
       const result = await service.findAll();
@@ -35,8 +73,8 @@ describe('PerformerService', () => {
   
     it('create deberia crear un performer', async () => {
       const performerDto = {
-        nombre: faker.name.findName(),
-        imagen: faker.image.imageUrl(),
+        nombre: faker.name.firstName(),
+        imagen: faker.image.url(),
         descripcion: 'ssss', 
       };
     
@@ -49,8 +87,8 @@ describe('PerformerService', () => {
   
     it('create deberia mostar un error si la descripcion tiene mas de 100 caracteres', async () => {
       const performerDto = {
-        nombre: faker.name.findName(),
-        imagen: faker.image.imageUrl(),
+        nombre: faker.name.firstName(),
+        imagen: faker.image.url(),
         descripcion: 'sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
         albumes: [], // se tienen 103 's'
       };
