@@ -1,10 +1,10 @@
-import { AlbumEntity } from '../Album/album.entity';
+import { AlbumEntity } from '../album/album.entity';
 import { Column, Entity, PrimaryGeneratedColumn, ManyToMany,ManyToOne, JoinTable} from 'typeorm';
 
 
 @Entity()
 export class TrackEntity{
-   "se usan los parametros dados por el enunciado en este caso nombre, codigo, pais, ciudad."
+
     @PrimaryGeneratedColumn('uuid')
     id: string;
     
