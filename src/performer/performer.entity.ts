@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable} from 'ty
 
 
 @Entity()
-export class TrackEntity{
+export class PerformerEntity{
    
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -17,9 +17,8 @@ export class TrackEntity{
     @Column()
     descripcion: string;
 
-    //ManyToOne con AlbumEntity
-    @ManyToMany(type => AlbumEntity, Album => Album.albums)
+
+    @ManyToMany(type => AlbumEntity, album => album.performers)
     @JoinTable()
     albums: AlbumEntity[];
-
 }

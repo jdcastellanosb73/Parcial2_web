@@ -1,5 +1,5 @@
-export class PerfomerDto {
+export class PerformerDto {
     readonly nombre: string;
     readonly imagen: string;
-    readonly duracion: string;
+    readonly descripcion: string;
 }

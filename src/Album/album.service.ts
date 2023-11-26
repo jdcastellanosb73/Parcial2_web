@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AlbumEntity } from './album.entity';
 import { TrackEntity } from '../Track/track.entity';
-import { PerformerEntity } from '../Perfomer/performer.entity';
+import { PerformerEntity } from '../performer/performer.entity';
 import { AlbumDto } from './album.dto';
 import { promises } from 'dns';
 
@@ -14,9 +14,9 @@ export class AlbumService {
         @InjectRepository(AlbumEntity)
         private albumRepository : Repository<AlbumEntity>,
         @InjectRepository(TrackEntity)
-        private track: Repository<TrackEntity>
+        private track: Repository<TrackEntity>,
         @InjectRepository(PerformerEntity)
-        private performer: Repository<PerformerEntity> 
+        private performer: Repository<PerformerEntity>, 
     ){}
 
     async findall(): Promise<AlbumEntity[]>{

@@ -1,4 +1,4 @@
-export class TackDto {
+export class TrackDto {
     readonly id: string;
     readonly nombre: string;
     readonly duracion: number;

@@ -7,7 +7,7 @@ import { AlbumService } from './album.service';
 import { faker } from '@faker-js/faker';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { TrackEntity } from '../track/track.entity';
-import { PerformerEntity } from '../perfomer/performer.entity';
+import { PerformerEntity } from '../performer/performer.entity';
 
 describe('albumService', () => {
   let service: AlbumService;

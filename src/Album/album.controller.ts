@@ -4,7 +4,7 @@ import { AlbumDto } from './album.dto';
 import { Response } from 'express';
 
 @Controller('albums')
-export class AerolineaController {
+export class AlbumController {
     constructor(private albumService: AlbumService) {}
 
     @Get()
